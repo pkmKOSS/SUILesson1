@@ -7,15 +7,108 @@
 
 import SwiftUI
 
+/// Представление с контентом экрана мини приложения
 struct ContentView: View {
+
+    private enum Constants {
+        static let defaultLabelText = "Текст лейбла для замены"
+        static let showButtonText = "Показать"
+        static let alertExampleText = "Пример алерта"
+        static let sayAText = "Сказать А"
+        static let sayAReplicText = "Аааааааа"
+        static let sayBText = "Сказать Б"
+        static let sayBReplicText = "Б-б-б"
+        static let showActionSheetText = "Показать шторку"
+        static let actionsText = "Действия"
+        static let actionsExemples = "Пример ActionSheet"
+        static let defaultEmptyText = ""
+    }
+
+    // MARK: - private properties
+
+    @State private var isErrorFirst = false
+    @State private var isErrorSecond = false
+    @State private var isPresented = false
+    @State private var labelText = Constants.defaultLabelText
+
+    // MARK: - public properties
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            Form {
+                Section {
+                    Text(labelText)
+                }
+
+                Section {
+                    makeFirstButton()
+                }
+
+                Section {
+                    makeButtonWithDoubleButtonAlert()
+                }
+
+                Section {
+                    makeActionSheertButton()
+                }
+
+                Section {
+                    makeBottomActionSheerButton()
+                }
+            }
         }
-        .padding()
+    }
+
+    private func makeFirstButton() -> some View {
+        Button(
+            action: {
+                self.isErrorFirst = true
+            },
+            label: {
+                Text(Constants.showButtonText)
+            })
+        .alert(isPresented: $isErrorFirst) {
+            Alert(title: Text(Constants.alertExampleText))
+        }
+    }
+
+    private func makeButtonWithDoubleButtonAlert() -> some View {
+        Button(
+            action: { self.isErrorSecond = true},
+            label: { Text(Constants.showButtonText)})
+        .alert(isPresented: $isErrorSecond) { Alert(
+            title: Text(Constants.alertExampleText),
+            primaryButton: .default( Text(Constants.sayAText),
+                                     action: {labelText = Constants.sayAReplicText}),
+            secondaryButton: .default(Text(Constants.sayBText),
+                                      action: { labelText = Constants.sayBReplicText}))}
+    }
+
+    private func makeActionSheertButton() -> some View {
+        Button(action: {
+            self.isPresented = true
+        }, label: {
+            Text(Constants.showActionSheetText)
+        }).confirmationDialog(Constants.showActionSheetText, isPresented: $isPresented, actions: {
+            Text(Constants.actionsText)
+        }) {
+            Text(Constants.actionsExemples)
+        }
+    }
+
+    private func makeBottomActionSheerButton() -> some View {
+        Button(
+            action: { self.isPresented = true },
+            label: { Text(Constants.showActionSheetText) })
+        .confirmationDialog(
+            Constants.showActionSheetText,
+            isPresented: $isPresented,
+            actions: {
+            Button(
+                action: { labelText = Constants.defaultEmptyText },
+                label: { Text(Constants.defaultEmptyText) }
+            )})
+        { Text(Constants.actionsExemples) }
     }
 }
 
