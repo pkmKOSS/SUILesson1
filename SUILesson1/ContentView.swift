@@ -26,9 +26,9 @@ struct ContentView: View {
 
     // MARK: - private properties
 
-    @State private var isErrorFirst = false
-    @State private var isErrorSecond = false
-    @State private var isPresented = false
+    @State private var isErrorFirstShown = false
+    @State private var isErrorSecondShown = false
+    @State private var isPresentedShown = false
     @State private var labelText = Constants.defaultLabelText
 
     // MARK: - public properties
@@ -41,42 +41,42 @@ struct ContentView: View {
                 }
 
                 Section {
-                    makeFirstButton()
+                    makeFirstButton
                 }
 
                 Section {
-                    makeButtonWithDoubleButtonAlert()
+                    makeButtonWithDoubleButtonAlert
                 }
 
                 Section {
-                    makeActionSheertButton()
+                    makeActionSheertButton
                 }
 
                 Section {
-                    makeBottomActionSheerButton()
+                    makeBottomActionSheerButton
                 }
             }
         }
     }
 
-    private func makeFirstButton() -> some View {
+    private var makeFirstButton: some View {
         Button(
             action: {
-                self.isErrorFirst = true
+                self.isErrorFirstShown = true
             },
             label: {
                 Text(Constants.showButtonText)
             })
-        .alert(isPresented: $isErrorFirst) {
+        .alert(isPresented: $isErrorFirstShown) {
             Alert(title: Text(Constants.alertExampleText))
         }
     }
 
-    private func makeButtonWithDoubleButtonAlert() -> some View {
+    private var makeButtonWithDoubleButtonAlert: some View {
         Button(
-            action: { self.isErrorSecond = true},
+            action: { self.isErrorSecondShown = true},
             label: { Text(Constants.showButtonText)})
-        .alert(isPresented: $isErrorSecond) { Alert(
+        .alert(isPresented: $isErrorSecondShown) { Alert(
             title: Text(Constants.alertExampleText),
             primaryButton: .default( Text(Constants.sayAText),
                                      action: {labelText = Constants.sayAReplicText}),
@@ -84,25 +84,25 @@ struct ContentView: View {
                                       action: { labelText = Constants.sayBReplicText}))}
     }
 
-    private func makeActionSheertButton() -> some View {
+    private var makeActionSheertButton: some View {
         Button(action: {
-            self.isPresented = true
+            self.isPresentedShown = true
         }, label: {
             Text(Constants.showActionSheetText)
-        }).confirmationDialog(Constants.showActionSheetText, isPresented: $isPresented, actions: {
+        }).confirmationDialog(Constants.showActionSheetText, isPresented: $isPresentedShown, actions: {
             Text(Constants.actionsText)
         }) {
             Text(Constants.actionsExemples)
         }
     }
 
-    private func makeBottomActionSheerButton() -> some View {
+    private var makeBottomActionSheerButton: some View {
         Button(
-            action: { self.isPresented = true },
+            action: { self.isPresentedShown = true },
             label: { Text(Constants.showActionSheetText) })
         .confirmationDialog(
             Constants.showActionSheetText,
-            isPresented: $isPresented,
+            isPresented: $isPresentedShown,
             actions: {
             Button(
                 action: { labelText = Constants.defaultEmptyText },
